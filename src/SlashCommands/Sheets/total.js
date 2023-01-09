@@ -12,16 +12,16 @@ module.exports = {
 		const rows = await client.googleSheets.values.get({
 			auth: client.auth,
 			spreadsheetId: "1bG5mHlKuCwnoHuR24zI1LqIjCVib_k2isJxJnUYE99k",
-			range: "bottest!F3",
+			range: "bottest!G2",
 		})
 		if(rows.data.values.length > 0) {
             let total = 0
 			for(let i = 0; i < rows.data.values.length; i++) {
 				const row = rows.data.values[i];
-                console.log(row[0])
+                //console.log(row[0])
                 total = row[0]
 			}
-            embed.addField(`**Total Cash Needed:**:`, `$${total}`) 
+            embed.addField(`**Total cash needed to buy everything:**:`, `${total}`) 
 		} else {
 			embed.setDescription("No items are needed! we are all good");
 		}

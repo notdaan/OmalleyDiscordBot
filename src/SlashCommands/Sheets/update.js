@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = {
 	name: "update",
-	description: "Checks if a user is in the list!",
+	description: "updates the item in the list",
 	userPerms: ["ADMINISTRATOR"],
 	options: [
 		{
@@ -81,6 +81,6 @@ module.exports = {
                 ]
             }
         });
-        return interaction.reply(item + " Has been updated to Amount: " + amount + " Price: " + price)
+        return interaction.reply("**" + item + "** Has been updated to **Amount: **" + amount + "** Price: **" + price)
 	}
 }

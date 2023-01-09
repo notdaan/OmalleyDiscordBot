@@ -36,7 +36,7 @@ module.exports = {
 		const data = rows.data.values.find(row => row[0] === item);
 
 		if (data) {
-			return interaction.reply("Item has been added to the list already!")
+			return interaction.reply("Item has been added to the list already! use /update or /remove")
 		} else if (!data) {
 			await client.googleSheets.values.append({
 				auth: client.auth,
@@ -50,7 +50,7 @@ module.exports = {
 				}
 			});
 	
-			return interaction.reply("The Item has been added to the list!")
+			return interaction.reply("**" + amount + " " + item + "** added at **" + price + "** each")
 		}
 	}
 }

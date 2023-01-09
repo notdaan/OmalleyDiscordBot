@@ -1,8 +1,8 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = {
-	name: "check",
-	description: "Checks if an item is in the list",
+	name: "getprice",
+	description: "returns the price of x items",
 	userPerms: ["ADMINISTRATOR"],
 	options: [
 		{
@@ -10,10 +10,18 @@ module.exports = {
 			description: "The item to check",
 			type: "STRING",
 			required: true,
-		}
+		},
+        {
+			name: "amount",
+			description: "how many?",
+			type: "STRING",
+			required: true,
+		},
+
 	],
 	run: async(client, interaction, args) => {
 		const item = await interaction.options.getString("item");
+        const amount = await interaction.options.getString("amount");
 		
 		const rows = await client.googleSheets.values.get({
 			auth: client.auth,
@@ -33,7 +41,14 @@ module.exports = {
 				for(let i = 0; i < rows.data.values.length; i++) {
 					const row = rows.data.values[i];
 					if (row[0] === item) {
-						embed.setDescription(`item: ${row[0]}\n**Amount:** ${row[1]} \n**Price:** ${row[2]} \n**Total:** ${row[3]}`);
+                        //console.log(row[2])
+                        //console.log(typeof row[2])
+                        let price = Number(row[2].replace(/[^0-9.-]+/g,""));
+                        //console.log(price)
+                        let total = (amount * price)
+                        //console.log(total)
+                        embed.setDescription('calculates the price of x amount of items')
+						embed.addField(`Item: ${row[0]}`, `**Amount**: ${amount}\n**Price for Amount**: ${total}`);
 					}
 				}
 
