@@ -1,12 +1,12 @@
 module.exports = {
 	name: "remove",
-	description: "Removes a user from the sheet!",
+	description: "Removes a item from the sheet!",
 	userPerms: ["ADMINISTRATOR"],
 	options: [
 		{
 			name: "item",
 			description: "Removes a item form the sheet!",
-			type: "USER",
+			type: "STRING",
 			required: true
 		}
 	],
@@ -53,6 +53,6 @@ module.exports = {
 			}
 		}).catch(console.error)
 
-		return interaction.reply("Item has been removed from the list!")
+		return interaction.reply(item +" has been removed from the list!")
 	}
 }
