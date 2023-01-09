@@ -83,5 +83,4 @@ module.exports = {
         });
         return interaction.reply(item + " Has been updated to Amount: " + amount + " Price: " + price)
 	}
-        
 }
