@@ -2,11 +2,9 @@ const { MessageEmbed } = require("discord.js");
 const verifiedRoles = [
 	'Congregation',
 ]
-
-
 module.exports = {
-	name: "add",
-	description: "adds bought materials to the current list.",
+	name: "sub",
+	description: "removes material that has been used from the list. ",
 	//userPerms: ["USER"],
 	options: [
 		{
@@ -21,19 +19,13 @@ module.exports = {
 			type: "STRING",
 			required: true,
 		},
-        {
-			name: "price",
-			description: "how much did you buy for?",
-			type: "STRING",
-			required: true,
-		}
-
 	],
 	run: async(client, interaction, args) => {
 		const item = await interaction.options.getString("item");
 		const amount = await interaction.options.getString("amount");
-        const price = await interaction.options.getString("price");
 		const charName = interaction.member.nickname;
+		let newAmount = 0
+		let oldAmount = 0
 		let validRoleForCommand = false
 		
 		for (let i = 0; i < verifiedRoles.length; i++) {
@@ -43,9 +35,6 @@ module.exports = {
 		};
 
 		if (validRoleForCommand === true) {
-			let newAmount = 0
-			let oldAmount = 0
-
 			const rows = await client.googleSheets.values.get({
 				auth: client.auth,
 				spreadsheetId: client.sheetId,
@@ -63,7 +52,7 @@ module.exports = {
 				if (row[0].toLowerCase() === item.toLowerCase()) {
 					appRange =	"CraftBOT!B" + (i + 1)
 					oldAmount = parseFloat(row[1])
-					newAmount = parseFloat(row[1]) + parseFloat(amount)
+					newAmount = parseFloat(row[1]) - parseFloat(amount)
 				}
 			}
 			console.log(appRange)
@@ -79,7 +68,6 @@ module.exports = {
         	    }
         	});
 
-			const total = (amount * price)
 			let date = Date()
 			await client.googleSheets.values.append({
         	    auth: client.auth,
@@ -88,12 +76,12 @@ module.exports = {
         	    valueInputOption: "USER_ENTERED",
         	    resource: {
         	        values: [
-        	            [charName, item,"Bought", amount, price, total, date]
+        	            [charName, item,"used","-"+amount, 0, 0, date]
         	        ]
         	    }
         	});
 
-        	return interaction.reply(charName + "\n ** Bought: **"+ amount + " " + item + "**\n Total Amount in storage: **" + newAmount +"\n Bought for: $" + price + " each")
+        	return interaction.reply(charName + " ** Used " + item + "** we had: " + oldAmount + " we now have **Total Amount: **" + newAmount)
 		}
 		return interaction.reply(charName + " Does not have the correct role for this command.")
 	}

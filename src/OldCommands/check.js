@@ -1,11 +1,9 @@
 const { MessageEmbed } = require("discord.js");
-const verifiedRoles = [
-	'Congregation',
-]
+
 module.exports = {
-	name: "check",
-	description: "Checks the material, returns the current amount, goal, needed and price",
-	//userPerms: ["USER"],
+	name: "check2",
+	description: "Checks if an item is in the list",
+	userPerms: ["ADMINISTRATOR"],
 	options: [
 		{
 			name: "item",
@@ -20,10 +18,10 @@ module.exports = {
 		const rows = await client.googleSheets.values.get({
 			auth: client.auth,
 			spreadsheetId: client.sheetId,
-			range: "CraftBOT!A:E"
+			range: "bottest!A:D"
 		});
 
-		const data = rows.data.values.find(row => row[0].toLowerCase() === item.toLowerCase());
+		const data = rows.data.values.find(row => row[0] === item);
 
 		if (data) {
 
@@ -34,8 +32,8 @@ module.exports = {
 
 				for(let i = 0; i < rows.data.values.length; i++) {
 					const row = rows.data.values[i];
-					if (row[0].toLowerCase() === item.toLowerCase()) {
-						embed.setDescription(`item: ${row[0]}\n**Current:** ${row[1]} \n**Goal:** ${row[2]} \n**Needed:** ${row[3]}\n**Price:** ${row[4]}`);
+					if (row[0] === item) {
+						embed.setDescription(`item: ${row[0]}\n**Amount:** ${row[1]} \n**Price:** ${row[2]} \n**Total:** ${row[3]}`);
 					}
 				}
 

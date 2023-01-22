@@ -1,9 +1,9 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = {
-	name: "getprice",
-	description: "returns the price of x items",
-	userPerms: ["ADMINISTRATOR"],
+	name: "price",
+	description: "calculates the price of x amount of y item",
+	//userPerms: ["USER"],
 	options: [
 		{
 			name: "item",
@@ -26,10 +26,10 @@ module.exports = {
 		const rows = await client.googleSheets.values.get({
 			auth: client.auth,
 			spreadsheetId: client.sheetId,
-			range: "bottest!A:D"
+			range: "CraftBOT!A:E"
 		});
 
-		const data = rows.data.values.find(row => row[0] === item);
+		const data = rows.data.values.find(row => row[0].toLowerCase() === item.toLowerCase());
 
 		if (data) {
 
@@ -40,15 +40,11 @@ module.exports = {
 
 				for(let i = 0; i < rows.data.values.length; i++) {
 					const row = rows.data.values[i];
-					if (row[0] === item) {
-                        //console.log(row[2])
-                        //console.log(typeof row[2])
-                        let price = Number(row[2].replace(/[^0-9.-]+/g,""));
-                        //console.log(price)
+					if (row[0].toLowerCase() === item.toLowerCase()) {
+                        let price = Number(row[4].replace(/[^0-9.-]+/g,""));
                         let total = (amount * price)
-                        //console.log(total)
-                        embed.setDescription('calculates the price of x amount of items')
-						embed.addField(`Item: ${row[0]}`, `**Amount**: ${amount}\n**Price for Amount**: ${total}`);
+                        embed.setDescription('calculates the price of X amount of items')
+						embed.addField(`Item: ${row[0]}`, `**Amount**: ${amount}\n**Price for Amount**: ${total}\n **Price Per Item**:${price}`);
 					}
 				}
 
