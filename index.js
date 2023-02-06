@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const fs = require("fs");
 const { google } = require('googleapis');
-const { Client, Collection, Intents, MessageEmbed } = require("discord.js");
+const { Client, Collection, Intents, MessageEmbed, MessageFlags } = require("discord.js");
 const { loadEvents } = require("./src/handlers/loadEvents");
 const { loadSlashCommands } = require("./src/handlers/loadSlashCommands");
 const { botToken, spreadsheetId, error_logs} = require("./src/jsons/config.json");
@@ -46,12 +46,13 @@ loadSlashCommands(client);
 process.on("uncaughtException", (err) => {
 	console.log("Uncaught Exception: " + err);
   
-	const exceptionembed = new MessageEmbed()
+	/* const exceptionembed = new MessageEmbed()
 	.setTitle("Uncaught Exception")
 	.setDescription(`${err}`)
 	.setColor("RED")
 	client.channels.cache.get(error_logs).send({ embeds: [exceptionembed] })
 	console.log(err);
+	console.log(exceptionembed) */
   });
   
 process.on("unhandledRejection", (reason, promise) => {
@@ -62,12 +63,12 @@ process.on("unhandledRejection", (reason, promise) => {
 	  reason.message
 	);
   
-	 const rejectionembed = new MessageEmbed()
+	 /* const rejectionembed = new MessageEmbed()
 	.setTitle("Unhandled Promise Rejection")
 	.addField("Promise", `${promise}`)
 	.addField("Reason", `${reason.message}`)
 	.setColor("RED")
-	client.channels.cache.get(error_logs).send({ embeds: [rejectionembed] })
+	client.channels.cache.get(error_logs).send({ embeds: [rejectionembed] }) */
 });
   
 client.login(botToken).then(() => {
@@ -76,4 +77,27 @@ client.login(botToken).then(() => {
 		` Successfully logged in as: ${client.user.username}#${client.user.discriminator} `
 	  )
 	);
+	client.user.setPresence({
+		status: "idle",
+		activities: [{
+			type: 2,
+			name: "Bill Screaming"
+		}],
+	
+	});
+});
+
+
+client.on('messageCreate', async(message)=>{
+	if(message.author.bot){
+		return
+	};
+	console.log(message)
+
+	if(message.content.includes("test")) {
+		message.reply("recieved")
+	}
+	if(message.content.includes("sinners")) {
+		message.reply("BLOODY MORONS")
+	}
 });
